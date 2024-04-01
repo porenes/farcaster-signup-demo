@@ -9,7 +9,7 @@ import { useFid } from "@/providers/fidContext";
 
 import { useEffect } from "react";
 import PuffLoader from "react-spinners/PuffLoader";
-import { IdGatewayABI } from "@/abi/IdGatewayABI";
+import { ID_GATEWAY_ADDRESS, idGatewayABI } from "@farcaster/hub-web";
 import { toast } from "sonner";
 
 export default function RegisterFIDButton({
@@ -23,17 +23,17 @@ export default function RegisterFIDButton({
   const { address, isConnected } = useAccount();
 
   const { data: price }: { data: bigint | undefined } = useContractRead({
-    address: "0x00000000Fc25870C6eD6b6c7E41Fb078b7656f69",
-    abi: IdGatewayABI,
+    address: ID_GATEWAY_ADDRESS,
+    abi: idGatewayABI,
     functionName: "price",
     chainId: 10,
   });
 
   const { config, isError, error } = usePrepareContractWrite({
-    address: "0x00000000Fc25870C6eD6b6c7E41Fb078b7656f69",
-    abi: IdGatewayABI,
+    address: ID_GATEWAY_ADDRESS,
+    abi: idGatewayABI,
     functionName: "register",
-    args: [recoveryAddress],
+    args: [recoveryAddress as `0x{string}`],
     enabled: Boolean(recoveryAddress),
     value: BigInt(price ?? 0),
   });

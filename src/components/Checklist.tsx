@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useAccount, useContractRead, useNetwork } from "wagmi";
 import { useFid } from "@/providers/fidContext";
 import { useSigner } from "@/providers/signerContext";
-import { IdRegistryABI } from "@/abi/IdRegistryABI";
+import { idRegistryABI, ID_REGISTRY_ADDRESS } from "@farcaster/hub-web";
 
 import { Toaster, toast } from "sonner";
 import axios from "axios";
@@ -45,22 +45,22 @@ export default function Checklist() {
   const [addSignerTxHash, setAddSignerTxHash] = useState<string>("");
 
   const { data: idOf } = useContractRead({
-    address: "0x00000000Fc6c5F01Fc30151999387Bb99A9f489b", // mainnet
+    address: ID_REGISTRY_ADDRESS, // mainnet
     // address: '0xb088Ff89329D74EdE2dD63C43c2951215910853D', // testnet
-    abi: IdRegistryABI,
+    abi: idRegistryABI,
     functionName: "idOf",
-    args: [address],
+    args: [address as `0x${string}`],
     enabled: Boolean(address),
     chainId: 10, // mainnet
     // chainId: 420, // testnet
   });
 
   const { data: recoveryOf } = useContractRead({
-    address: "0x00000000Fc6c5F01Fc30151999387Bb99A9f489b", // mainnet
+    address: ID_REGISTRY_ADDRESS, // mainnet
     // address: '0xb088Ff89329D74EdE2dD63C43c2951215910853D', // testnet
-    abi: IdRegistryABI,
+    abi: idRegistryABI,
     functionName: "recoveryOf",
-    args: [fid],
+    args: [BigInt(fid)],
     enabled: Boolean(fid),
     chainId: 10, // mainnet
     // chainId: 420, // testnet
@@ -199,7 +199,7 @@ export default function Checklist() {
               onChange={(e) => setRecoveryAddress(e.target.value)}
               className="mt-2 block w-64 rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300 disabled:bg-gray-100 disabled:text-gray-500 disabled:dark:bg-gray-800 disabled:dark:text-gray-400 disabled:dark:ring-gray-700 duration-100"
               placeholder="Recovery address"
-              disabled={!isConnected || disableRecoveryAddress}
+              // disabled={!isConnected || disableRecoveryAddress}
               data-1p-ignore
             />
           </div>
@@ -264,8 +264,7 @@ export default function Checklist() {
               id="offers-description"
               className="text-gray-500 dark:text-gray-400"
             >
-              A signer is a key pair that lets you create new messages or
-              "casts"
+              A signer is a key pair that lets you create new messages or casts
             </p>
             <div className="flex flex-row gap-x-1 text-gray-500 dark:text-gray-400">
               <a
@@ -305,7 +304,7 @@ export default function Checklist() {
               className="text-gray-500 dark:text-gray-400"
             >
               Acquire a free offchain ENS username issued by Farcaster. <br />
-              You can also use onchain ENS names, but that's not covered here.
+              You can also use onchain ENS names, but that s not covered here.
             </p>
             <a
               href="https://github.com/wojtekwtf/farcaster-signup-demo/blob/main/src/components/RegisterFNameButton.tsx"
